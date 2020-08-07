@@ -12,6 +12,14 @@ Inicialmente é necessário uma classe de configuração exemplo:
 ```
 
 A anotação ***@EnableGlobalMethodSecirity( prePostEnabled = true )*** serve para permitir que os métodos dos controllers tenham o direito de guardarem suas próprias rotas.
+#### Exemplo:
+```
+@GetMapping
+@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_ADMINTRAINEE')")
+public List<Student> getAllStudents(){
+  return STUDENTS;
+}
+```
  
 No Spring existe vários elementos que permite você torna-lo super customizavel
 a ***WebSecurityConfigAdapter***: é a classe mãe que te dá acesso á métodos que modificam
