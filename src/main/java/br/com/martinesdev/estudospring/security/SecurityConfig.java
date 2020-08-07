@@ -54,10 +54,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 			.antMatchers("/api/v1/**")
 				.hasAnyRole( "STUDENT","ADMIN","ADMINTRAINEE" )
 				
-			.antMatchers( HttpMethod.DELETE , "/management/api/**").hasAuthority(ApplicationUserPermission.COURSE_WRITE.getPermission())
-			.antMatchers( HttpMethod.POST   , "/management/api/**").hasAuthority(ApplicationUserPermission.COURSE_WRITE.getPermission())
-			.antMatchers( HttpMethod.PUT    , "/management/api/**").hasAuthority(ApplicationUserPermission.COURSE_WRITE.getPermission())
-			.antMatchers( HttpMethod.GET    , "/management/api/**").hasAnyRole( ApplicationUserRole.ADMIN.name(),ApplicationUserRole.ADMINTRAINEE.name() )
+			.antMatchers( HttpMethod.DELETE , "/management/api/**")
+				.hasAuthority(ApplicationUserPermission.COURSE_WRITE.getPermission())
+				
+			.antMatchers( HttpMethod.POST   , "/management/api/**")
+				.hasAuthority(ApplicationUserPermission.COURSE_WRITE.getPermission())
+				
+			.antMatchers( HttpMethod.PUT    , "/management/api/**")
+				.hasAuthority(ApplicationUserPermission.COURSE_WRITE.getPermission())
+				
+			.antMatchers( HttpMethod.GET    , "/management/api/**")
+				.hasAnyRole( ApplicationUserRole.ADMIN.name(),ApplicationUserRole.ADMINTRAINEE.name() )
 			
 			.anyRequest()
 			.authenticated()
