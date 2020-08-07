@@ -1,7 +1,5 @@
 package br.com.martinesdev.estudospring.security;
 
-import java.util.concurrent.TimeUnit;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,9 +10,12 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import br.com.martinesdev.estudospring.auth.ApplicationUserService;
+import br.com.martinesdev.estudospring.jwt.JWTUserNamePassordAuthenticationFilter;
+import br.com.martinesdev.estudospring.jwt.JWTverifierFilter;
 
 
 @Configuration
@@ -46,9 +47,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 		http 
 			//.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 			.csrf().disable()
+				/* disable session because aws is stateless*/
+				.sessionManagement()
+					.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			.and()
+			.addFilter( new JWTUserNamePassordAuthenticationFilter( authenticationManager() ) )
+				.addFilterAfter( new JWTverifierFilter(), JWTUserNamePassordAuthenticationFilter.class )
 			.authorizeRequests()
 			
-			.antMatchers("/","/home","/css/*","/js/*")
+			.antMatchers("/","/home","/css/*","/js/*" )
 				.permitAll()
 				
 			.antMatchers("/api/v1/**")
@@ -68,25 +75,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 			
 			.anyRequest()
 			.authenticated()
-		.and()
-			.formLogin()
-			.loginPage("/login").permitAll().defaultSuccessUrl("/curses",true )
-			.passwordParameter("password")
-			.usernameParameter("username")
-		.and()
-			.rememberMe().tokenValiditySeconds( ( int )TimeUnit.DAYS.toSeconds( 21 ))
-			.rememberMeParameter("remember-me")
-				.key("IlikecookiesAndSecuritingThingsWithSpringBoot")
-				
-		.and()
-			.logout()
-				//.logoutRequestMatcher( new AntPathRequestMatcher("/logout","GET"))
-				.logoutUrl("/logout")
-				.clearAuthentication(true)
-				.invalidateHttpSession(true)
-				.deleteCookies("JSESSIONID","remember-me")
-				.logoutSuccessUrl("/login")
+			
 		;
+		
+//		.and()
+//			.formLogin()
+//			.loginPage("/login").permitAll().defaultSuccessUrl("/curses",true )
+//			.passwordParameter("password")
+//			.usernameParameter("username")
+//		.and()
+//			.rememberMe().tokenValiditySeconds( ( int )TimeUnit.DAYS.toSeconds( 21 ))
+//			.rememberMeParameter("remember-me")
+//				.key("IlikecookiesAndSecuritingThingsWithSpringBoot")
+//				
+//		.and()
+//			.logout()
+//				//.logoutRequestMatcher( new AntPathRequestMatcher("/logout","GET"))
+//				.logoutUrl("/logout")
+//				.clearAuthentication(true)
+//				.invalidateHttpSession(true)
+//				.deleteCookies("JSESSIONID","remember-me")
+//				.logoutSuccessUrl("/login")
+//		;
+//	
+			
 			
 	}
 	
