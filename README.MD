@@ -11,10 +11,10 @@ Inicialmente é necessário uma classe de configuração exemplo:
  } 
 ```
 
-A anotação @EnableGlobalMethodSecirity( prePostEnabled = true ) serve para permitir que os métodos dos controllers tenham o direito de guardarem suas próprias rotas.
+A anotação ***@EnableGlobalMethodSecirity( prePostEnabled = true )*** serve para permitir que os métodos dos controllers tenham o direito de guardarem suas próprias rotas.
  
 No Spring existe vários elementos que permite você torna-lo super customizavel
-WebSecurityConfigAdapter: é a classe que te dá acesso á métodos que modificam
+a ***WebSecurityConfigAdapter***: é a classe mãe que te dá acesso á métodos que modificam
 o spring boot security, permitindo a customização da autenticação e autorização.
 
 ## Interfaces de autenticação:
@@ -62,15 +62,15 @@ Um antMatcher pode ser ligado com:
 
 
 ### Exemplo de Filtro por roles ou permissions
-
+```
       .antMatchers( "/sua_rota_restrita" )
-      .hasAuthority(“ROLE_ADMIN”) 
-      .hasAnyAuthority(“ROLE_ADMIN”,”ROLE_SUPER_ADMIN”)
+      .hasAuthority("ROLE_ADMIN") 
+      .hasAnyAuthority("ROLE_ADMIN","ROLE_SUPER_ADMIN")
       .hasRole(“ADMIN”) 
-      .hasAnyAuthority(“ADMIN”,”SUPER_ADMIN”)
+      .hasAnyAuthority("ADMIN","SUPER_ADMIN")
 	  
 	  .authenticated() -> proteger todas as rotas que não tenham permitall().
-
+```
 ### Exemplo de uma rota para o antMatcher
 	“/minha_rota” -> filtro para minha_rota
 	“/minha_rota/**” ->  filtro para /minha_rota/ e todos os sub items.
